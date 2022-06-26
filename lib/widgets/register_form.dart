@@ -1,5 +1,8 @@
+import 'package:assignment2_2022/services/user_helper.dart';
+import 'package:assignment2_2022/widgets/app_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../miscellaneous/constants.dart';
 import '../miscellaneous/validators.dart';
@@ -72,8 +75,22 @@ class _RegisterFormState extends State<RegisterForm> {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(40),
               ),
-              onPressed: () {},
+              onPressed: () {
+                createNewUserInUI(context,
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim(),
+                    retypePassword: retypePasswordController.text.trim());
+              },
               child: const Text('Register'),
+            ),
+            Selector<UserManagementViewModel, Tuple2>(
+              selector: (context, value) =>
+                  Tuple2(value.showUserProgress, value.userProgressText),
+              builder: (context, value, child) {
+                return value.item1
+                    ? AppProgressIndicator(text: '${value.item2}')
+                    : Container();
+              },
             ),
           ],
         ),

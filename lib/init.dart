@@ -9,11 +9,11 @@ import 'package:provider/provider.dart';
 
 class InitApp {
   static const String apiKeyAndroid =
-      '34001CA4-E43DE-44B60-94677-342EFCF38782'; //add your own key
+      '3BDAC8E9-6FA9-4842-836A-CA0FDB84D19C'; //add your own key
   static const String apiKeyIOS =
-      'FB4C825E8-B4F01-48752-8B548-3ADF87659663'; //add your own key
+      'A21A191A-7E38-4F4E-922F-48B03500241D'; //add your own key
   static const String appID =
-      '5D0957284-F282D-FAC84-FF8BB-5489CB2C83100'; // add your own key
+      '79E54C85-0790-7BCE-FF89-D5A14FC1C100'; // add your own key
 
   static void initializeApp(BuildContext context) async {
     await Backendless.initApp(
