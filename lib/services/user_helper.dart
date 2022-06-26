@@ -61,28 +61,29 @@ void loginUserInUI(BuildContext context,
   }
 }
 
-// void resetPasswordInUI(BuildContext context, {required String email}) async {
-//   if (email.isEmpty) {
-//     showSnackBar(context,
-//         'Please enter your email address then click on Reset Password again!');
-//   } else {
-//     String result =
-//         await context.read<UserService>().resetPassword(email.trim());
-//     if (result == 'OK') {
-//       showSnackBar(
-//           context, 'Successfully sent password reset. Please check your mail');
-//     } else {
-//       showSnackBar(context, result);
-//     }
-//   }
-// }
+void logoutUserInUI(BuildContext context) async {
+  String result = await context.read<UserManagementViewModel>().logoutUser();
+  if (result == 'OK') {
+    context.read<UserManagementViewModel>().setCurrentUserToNull();
+    Navigator.popAndPushNamed(context, RouteManager.loginPage);
+  } else {
+    showSnackBar(context, result);
+  }
+}
 
-// void logoutUserInUI(BuildContext context) async {
-//   String result = await context.read<UserService>().logoutUser();
-//   if (result == 'OK') {
-//     context.read<UserService>().setCurrentUserNull();
-//     Navigator.popAndPushNamed(context, RouteManager.loginPage);
-//   } else {
-//     showSnackBar(context, result);
-//   }
-// }
+//reset user password
+void resetPasswordInUI(BuildContext context, {required String email}) async {
+  if (email.isEmpty) {
+    showSnackBar(context,
+        'Please enter your email address and click on "Reset Password"');
+  } else {
+    String result = await context
+        .read<UserManagementViewModel>()
+        .resetPassword(email.trim());
+    if (result == 'OK') {
+      showSnackBar(context, 'Reset instructions sent to ${'email'}');
+    } else {
+      showSnackBar(context, result);
+    }
+  }
+}

@@ -31,45 +31,6 @@ class UserManagementViewModel with ChangeNotifier {
   String _userProgressText = '';
   String get userProgressText => _userProgressText;
 
-  //checking if user exists
-  Future<String> checkIfUserLoggedIn() async {
-    String result = 'OK';
-
-    bool? validLogin = await Backendless.userService
-        .isValidLogin()
-        .onError((error, stackTrace) {
-      result = error.toString();
-    });
-
-    if (validLogin != null && validLogin) {
-      String? currentUserObjectId = await Backendless.userService
-          .loggedInUser()
-          .onError((error, stackTrace) {
-        result = error.toString();
-      });
-      if (currentUserObjectId != null) {
-        Map<dynamic, dynamic>? mapOfCurrentUser = await Backendless.data
-            .of("Users")
-            .findById(currentUserObjectId)
-            .onError((error, stackTrace) {
-          result = error.toString();
-        });
-        if (mapOfCurrentUser != null) {
-          _currentUser = BackendlessUser.fromJson(mapOfCurrentUser);
-          notifyListeners();
-        } else {
-          result = 'NOT OK';
-        }
-      } else {
-        result = 'NOT OK';
-      }
-    } else {
-      result = 'NOT OK';
-    }
-
-    return result;
-  }
-
   //creating a new user
   Future<String> createUserAccount(BackendlessUser user) async {
     String result = 'OK';
@@ -130,6 +91,75 @@ class UserManagementViewModel with ChangeNotifier {
     if (user != null) {
       _currentUser = user;
     }
+    _showUserProgress = false;
+    notifyListeners();
+    return result;
+  }
+
+  //check if the user is logged in and keep them logged in
+  Future<String> checkIfUserLoggedIn() async {
+      String result = 'OK';
+
+      bool? validLogin = await Backendless.userService
+          .isValidLogin()
+          .onError((error, stackTrace) {
+        result = error.toString();
+      });
+
+      if (validLogin != null && validLogin) {
+        String? currentUserObjectId = await Backendless.userService
+            .loggedInUser()
+            .onError((error, stackTrace) {
+          result = error.toString();
+        });
+        if (currentUserObjectId != null) {
+          Map<dynamic, dynamic>? mapOfCurrentUser = await Backendless.data
+              .of("Users")
+              .findById(currentUserObjectId)
+              .onError((error, stackTrace) {
+            result = error.toString();
+          });
+          if (mapOfCurrentUser != null) {
+            _currentUser = BackendlessUser.fromJson(mapOfCurrentUser);
+            notifyListeners();
+          } else {
+            result = 'NOT OK';
+          }
+        } else {
+          result = 'NOT OK';
+        }
+      } else {
+        result = 'NOT OK';
+      }
+
+      return result;
+    }
+
+    //logout the user from the app
+    Future<String> logoutUser() async {
+    String result = 'OK';
+    _showUserProgress = true;
+    _userProgressText = 'Logging out...';
+    notifyListeners();
+    await Backendless.userService.logout().onError((error, stackTrace) {
+      result = error.toString();
+    });
+    _showUserProgress = false;
+    notifyListeners();
+    return result;
+  }
+
+  //reset user password
+  Future<String> resetPassword(String username) async {
+    String result = 'OK';
+    _showUserProgress = true;
+    _userProgressText = 'Resetting password...';
+    notifyListeners();
+    await Backendless.userService
+        .restorePassword(username)
+        .onError((error, stackTrace) {
+      result = getError(error.toString());
+    });
     _showUserProgress = false;
     notifyListeners();
     return result;
