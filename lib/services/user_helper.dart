@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:assignment2_2022/view_models/note_view_model.dart';
 import 'package:assignment2_2022/view_models/user_management_view_model.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../routes/route_manager.dart';
 import '../widgets/dialogs.dart';
 
 void createNewUserInUI(BuildContext context,
@@ -40,23 +42,24 @@ void createNewUserInUI(BuildContext context,
   }
 }
 
-// void loginUserInUI(BuildContext context,
-//     {required String email, required String password}) async {
-//   FocusManager.instance.primaryFocus?.unfocus();
-//   if (email.isEmpty || password.isEmpty) {
-//     showSnackBar(context, 'Please enter both fields!');
-//   } else {
-//     String result = await context
-//         .read<UserService>()
-//         .loginUser(email.trim(), password.trim());
-//     if (result != 'OK') {
-//       showSnackBar(context, result);
-//     } else {
-//       context.read<TodoService>().getTodos(email);
-//       Navigator.of(context).popAndPushNamed(RouteManager.todoPage);
-//     }
-//   }
-// }
+void loginUserInUI(BuildContext context,
+    {required String email, required String password}) async {
+  FocusManager.instance.primaryFocus?.unfocus();
+  if (email.isEmpty || password.isEmpty) {
+    showSnackBar(context, 'All fields are required!');
+  } else {
+    String result = await context
+        .read<UserManagementViewModel>()
+        .loginUser(email.trim(), password.trim());
+    if (result != 'OK') {
+      showSnackBar(context, result);
+    } else {
+      //get the user's notes
+      // context.read<NoteViewModel>().getNotes(email);
+      Navigator.of(context).popAndPushNamed(RouteManager.noteListPage);
+    }
+  }
+}
 
 // void resetPasswordInUI(BuildContext context, {required String email}) async {
 //   if (email.isEmpty) {

@@ -115,6 +115,25 @@ class UserManagementViewModel with ChangeNotifier {
       print(error.toString());
     });
   }
+
+  //logging in the user
+  Future<String> loginUser(String username, String password) async {
+    String result = 'OK';
+    _showUserProgress = true;
+    _userProgressText = 'Logging in...';
+    notifyListeners();
+    BackendlessUser? user = await Backendless.userService
+        .login(username, password, true)
+        .onError((error, stackTrace) {
+      result = getError(error.toString());
+    });
+    if (user != null) {
+      _currentUser = user;
+    }
+    _showUserProgress = false;
+    notifyListeners();
+    return result;
+  }
 }
 
 //error messages
