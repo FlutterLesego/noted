@@ -2,17 +2,29 @@ import 'package:flutter/material.dart';
 
 const TextStyle headingStyle = TextStyle(
   fontSize: 22,
-  color: Colors.blue,
+  color: Colors.black,
+  fontWeight: FontWeight.w300
+);
+const TextStyle whiteHeadingStyle = TextStyle(
+  fontSize: 22,
+  color: Colors.white,
+  fontWeight: FontWeight.w300
 );
 
-const TextStyle style14Blue = TextStyle(
-  fontSize: 14,
-  color: Colors.blue,
+const TextStyle style14Black = TextStyle(
+  fontSize: 18,
+  color: Colors.black,
+  fontWeight: FontWeight.w300
+);
+
+const TextStyle styleWhite = TextStyle(
+  fontSize: 16,
+  color: Colors.white,
 );
 
 const TextStyle titleStyle = TextStyle(
   fontSize: 22,
-  color: Colors.blue,
+  color: Colors.black,
   fontWeight: FontWeight.bold,
 );
 
@@ -22,7 +34,7 @@ const focusedBorder = OutlineInputBorder(
   ),
   borderSide: BorderSide(
     width: 2,
-    color: Colors.blue,
+    color: Colors.black,
   ),
 );
 
@@ -42,7 +54,7 @@ const enabledBorder = OutlineInputBorder(
   ),
   borderSide: BorderSide(
     width: 1,
-    color: Colors.blue,
+    color: Colors.black,
   ),
 );
 
@@ -54,15 +66,16 @@ InputDecoration formDecoration(String labelText, IconData iconData) {
       //counterText: '',
       prefixIcon: Icon(
         iconData,
-        color: Colors.blue,
+        color: Colors.black,
       ),
       errorMaxLines: 3,
       labelText: labelText,
-      labelStyle: const TextStyle(color: Colors.blue),
+      labelStyle: const TextStyle(color: Colors.grey),
       enabledBorder: enabledBorder,
       focusedBorder: focusedBorder,
       errorBorder: errorBorder,
-      focusedErrorBorder: errorBorder);
+      focusedErrorBorder: errorBorder,
+      );
 }
 
 class SizedBoxH10 extends StatelessWidget {

@@ -6,8 +6,8 @@ void showSnackBar(BuildContext context, String message) {
   final snackBar = SnackBar(
     shape: const RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(5)),),
-    backgroundColor: Colors.blue,
-    duration: const Duration(milliseconds: 3500),
+    backgroundColor: Colors.black,
+    duration: const Duration(milliseconds: 3000),
     content: Text(message,
     textAlign: TextAlign.center,),
   );

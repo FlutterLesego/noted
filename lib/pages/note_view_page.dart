@@ -1,36 +1,30 @@
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart' as provider;
 
 import '../miscellaneous/constants.dart';
+import '../models/note.dart';
+import '../view_models/note_view_model.dart';
+import '../widgets/note_view.dart';
 
 class NoteViewPage extends StatelessWidget {
-  const NoteViewPage({Key? key}) : super(key: key);
+  const NoteViewPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('View Note'),
+          backgroundColor: Colors.black,
+          title: const Text('View Note',
+          style: whiteHeadingStyle,),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                'Title',
-                style: titleStyle,
-              ),
-              SizedBoxH20(),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Text(
-                  'Message',
-                  style: style14Blue,
-                ),
-              ),
-            ],
-          ),
-        ));
+            padding: const EdgeInsets.all(12.0),
+            child: provider.Consumer<NoteViewModel>(
+                builder: (context, value, child) {
+                return NoteView(note: Note(title: '', message: ''));
+            })));
   }
 }

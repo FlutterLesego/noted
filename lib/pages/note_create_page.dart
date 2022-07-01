@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../miscellaneous/constants.dart';
 import '../widgets/note_form.dart';
 
 class NoteCreatePage extends StatelessWidget {
@@ -9,7 +10,9 @@ class NoteCreatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create a new Note'),
+        backgroundColor: Colors.black,
+        title: const Text('Create a new note',
+        style: whiteHeadingStyle,),
       ),
       body: Stack(
         children: const [

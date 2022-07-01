@@ -19,12 +19,12 @@ class NavigationAndDialogService {
   void showSnackBar({required String message, required String title}) {
     Flushbar(
       borderRadius: BorderRadius.circular(10),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.black,
       title: title,
       message: message,
       titleColor: Colors.white,
       messageColor: Colors.white,
-      duration: const Duration(milliseconds: 3500),
+      duration: const Duration(milliseconds: 3000),
       flushbarPosition: FlushbarPosition.BOTTOM,
       maxWidth: double.infinity,
       margin: const EdgeInsets.only(bottom: 2, left: 2, right: 2),

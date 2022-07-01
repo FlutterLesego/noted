@@ -48,6 +48,7 @@ class _NoteFormState extends State<NoteForm> {
             ),
             const SizedBoxH30(),
             TextFormField(
+              textCapitalization: TextCapitalization.characters,
               validator: validateEmptyTitle,
               controller: titleController,
               decoration: formDecoration('Title', Icons.book),
@@ -63,9 +64,16 @@ class _NoteFormState extends State<NoteForm> {
             const SizedBoxH20(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: Colors.black,
                 minimumSize: const Size.fromHeight(40),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                FocusManager.instance.primaryFocus?.unfocus();
+                //call the create note method to create a new note
+                context.read<NoteViewModel>().createNoteInUI(context,
+                    titleController: titleController,
+                    messageController: messageController);
+              },
               child: const Text('Save Note'),
             ),
           ],

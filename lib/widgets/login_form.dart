@@ -1,5 +1,3 @@
-import 'package:assignment2_2022/services/user_helper.dart';
-import 'package:assignment2_2022/widgets/app_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -7,7 +5,9 @@ import 'package:tuple/tuple.dart';
 import '../miscellaneous/constants.dart';
 import '../miscellaneous/validators.dart';
 import '../routes/route_manager.dart';
+import '../services/user_helper.dart';
 import '../view_models/user_management_view_model.dart';
+import 'app_progress_indicator.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -47,7 +47,7 @@ class _LoginFormState extends State<LoginForm> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              'Login a User',
+              'Welcome to MyNotes!',
               style: headingStyle,
             ),
             const SizedBoxH30(),
@@ -58,6 +58,8 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBoxH10(),
             TextFormField(
+              obscureText: true,
+              obscuringCharacter: '*',
               validator: validatePassword,
               controller: passwordController,
               decoration: formDecoration('Password', Icons.lock),
@@ -65,35 +67,40 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBoxH20(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: Colors.black,
                 minimumSize: const Size.fromHeight(40),
               ),
               onPressed: () {
-                loginUserInUI(context,
+                FocusManager.instance.primaryFocus?.unfocus();
+                context.read<UserManagementViewModel>().loginUserInUI(context,
                     email: emailController.text.trim(),
                     password: passwordController.text.trim());
               },
               child: const Text('Login'),
             ),
             ButtonBar(
-              alignment: MainAxisAlignment.center,
+              alignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.deepOrange,
-                    minimumSize: const Size(140, 40),
-                  ),
+                TextButton(
                   onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     Navigator.of(context).pushNamed(RouteManager.registerPage);
                   },
-                  child: const Text('Register'),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.deepOrange,
-                    minimumSize: const Size(140, 40),
+                  child: const Text(
+                    'Register',
+                    style: style14Black,
                   ),
-                  onPressed: () {},
-                  child: const Text('Reset Password'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    resetPasswordInUI(context,
+                        email: emailController.text.trim());
+                  },
+                  child: const Text(
+                    'Reset Password',
+                    style: style14Black,
+                  ),
                 ),
               ],
             ),

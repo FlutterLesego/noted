@@ -1,5 +1,4 @@
-import 'package:assignment2_2022/services/user_helper.dart';
-import 'package:assignment2_2022/widgets/app_progress_indicator.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -7,6 +6,7 @@ import 'package:tuple/tuple.dart';
 import '../miscellaneous/constants.dart';
 import '../miscellaneous/validators.dart';
 import '../view_models/user_management_view_model.dart';
+import 'app_progress_indicator.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({
@@ -49,7 +49,7 @@ class _RegisterFormState extends State<RegisterForm> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              'Register a new User',
+              'Register a new user',
               style: headingStyle,
             ),
             const SizedBoxH30(),
@@ -60,23 +60,28 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
             const SizedBoxH10(),
             TextFormField(
+              obscureText: true,
+              obscuringCharacter: '*',
               validator: validatePassword,
               controller: passwordController,
               decoration: formDecoration('Password', Icons.lock),
             ),
             const SizedBoxH10(),
             TextFormField(
-              validator: validatePassword,
+              obscureText: true,
+              obscuringCharacter: '*',
+              validator: validateRetypePassword,
               controller: retypePasswordController,
               decoration: formDecoration('Re-Type Password', Icons.lock),
             ),
             const SizedBoxH20(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: Colors.black,
                 minimumSize: const Size.fromHeight(40),
               ),
               onPressed: () {
-                createNewUserInUI(context,
+                context.read<UserManagementViewModel>().createNewUserInUI(context,
                     email: emailController.text.trim(),
                     password: passwordController.text.trim(),
                     retypePassword: retypePasswordController.text.trim());

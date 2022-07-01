@@ -18,11 +18,13 @@ class AppProgressIndicator extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const CircularProgressIndicator(),
+              const CircularProgressIndicator(
+                color: Colors.black,
+              ),
               const SizedBoxH20(),
               Text(
                 text,
-                style: style14Blue,
+                style: style14Black,
               ),
             ],
           ),

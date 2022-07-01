@@ -1,8 +1,13 @@
-// ignore_for_file: body_might_complete_normally_nullable, prefer_is_empty, avoid_print
+// ignore_for_file: body_might_complete_normally_nullable, prefer_is_empty, avoid_print, use_build_context_synchronously, unused_import, avoid_web_libraries_in_flutter
 
-import 'package:assignment2_2022/models/note_entry.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import '../models/note_entry.dart';
+import '../routes/route_manager.dart';
+import '../widgets/dialogs.dart';
+import 'note_view_model.dart';
 
 class UserManagementViewModel with ChangeNotifier {
   final registerFormKey = GlobalKey<FormState>();
@@ -56,6 +61,31 @@ class UserManagementViewModel with ChangeNotifier {
     return result;
   }
 
+  //create a new user
+  void createNewUserInUI(BuildContext context,
+      {required String email,
+      required String password,
+      required String retypePassword}) async {
+    if (registerFormKey.currentState?.validate() ?? false) {
+      if (retypePassword.toString().trim() != password.toString().trim()) {
+        showSnackBar(context, "passwords do not match!");
+      }
+      else{
+      BackendlessUser user = BackendlessUser()
+        ..email = email.trim()
+        ..password = password.trim();
+
+      String result =
+          await context.read<UserManagementViewModel>().createUserAccount(user);
+      if (result != 'OK') {
+        showSnackBar(context, result);
+      } else {
+        showSnackBar(context, 'Account created successfully!');
+        Navigator.pop(context);
+      }}
+    }
+  }
+
   //check if the user already exists
   void checkIfUserExists(String username) async {
     DataQueryBuilder queryBuilder = DataQueryBuilder()
@@ -96,47 +126,64 @@ class UserManagementViewModel with ChangeNotifier {
     return result;
   }
 
+  void loginUserInUI(BuildContext context,
+      {required String email, required String password}) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (loginFormKey.currentState?.validate() ?? false) {
+      String result = await context
+          .read<UserManagementViewModel>()
+          .loginUser(email.trim(), password.trim());
+      if (result != 'OK') {
+        showSnackBar(context, result);
+      } else {
+        // get the user's notes
+        context.read<NoteViewModel>().getNotes(email);
+        Navigator.of(context).popAndPushNamed(RouteManager.noteListPage);
+      }
+    }
+  }
+
   //check if the user is logged in and keep them logged in
   Future<String> checkIfUserLoggedIn() async {
-      String result = 'OK';
+    String result = 'OK';
 
-      bool? validLogin = await Backendless.userService
-          .isValidLogin()
+    bool? validLogin = await Backendless.userService
+        .isValidLogin()
+        .onError((error, stackTrace) {
+      result = error.toString();
+    });
+
+    if (validLogin != null && validLogin) {
+      String? currentUserObjectId = await Backendless.userService
+          .loggedInUser()
           .onError((error, stackTrace) {
         result = error.toString();
       });
-
-      if (validLogin != null && validLogin) {
-        String? currentUserObjectId = await Backendless.userService
-            .loggedInUser()
+      if (currentUserObjectId != null) {
+        Map<dynamic, dynamic>? mapOfCurrentUser = await Backendless.data
+            .of("Users")
+            .findById(currentUserObjectId)
             .onError((error, stackTrace) {
           result = error.toString();
         });
-        if (currentUserObjectId != null) {
-          Map<dynamic, dynamic>? mapOfCurrentUser = await Backendless.data
-              .of("Users")
-              .findById(currentUserObjectId)
-              .onError((error, stackTrace) {
-            result = error.toString();
-          });
-          if (mapOfCurrentUser != null) {
-            _currentUser = BackendlessUser.fromJson(mapOfCurrentUser);
-            notifyListeners();
-          } else {
-            result = 'NOT OK';
-          }
+        if (mapOfCurrentUser != null) {
+          _currentUser = BackendlessUser.fromJson(mapOfCurrentUser);
+          notifyListeners();
         } else {
           result = 'NOT OK';
         }
       } else {
         result = 'NOT OK';
       }
-
-      return result;
+    } else {
+      result = 'NOT OK';
     }
 
-    //logout the user from the app
-    Future<String> logoutUser() async {
+    return result;
+  }
+
+  //logout the user from the app
+  Future<String> logoutUser() async {
     String result = 'OK';
     _showUserProgress = true;
     _userProgressText = 'Logging out...';

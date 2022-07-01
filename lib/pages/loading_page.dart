@@ -1,6 +1,6 @@
-import 'package:assignment2_2022/init.dart';
 import 'package:flutter/material.dart';
 
+import '../init.dart';
 import '../widgets/app_progress_indicator.dart';
 
 class LoadingPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _LoadingPageState extends State<LoadingPage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: AppProgressIndicator(
-          text: 'Busy checking credentials...please wait...'),
+          text: 'Loading...please wait...'),
     );
   }
 }
