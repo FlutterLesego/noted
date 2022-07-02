@@ -4,7 +4,6 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-import '../models/note_entry.dart';
 import '../routes/route_manager.dart';
 import '../widgets/dialogs.dart';
 import 'note_view_model.dart';
@@ -46,13 +45,6 @@ class UserManagementViewModel with ChangeNotifier {
 
     try {
       await Backendless.userService.register(user);
-      NoteEntry emptyEntry = NoteEntry(notes: {}, username: user.email);
-      await Backendless.data
-          .of('NoteEntry')
-          .save(emptyEntry.toJson())
-          .onError((error, stackTrace) {
-        result = error.toString();
-      });
     } catch (e) {
       result = getError(e.toString());
     }
@@ -61,28 +53,29 @@ class UserManagementViewModel with ChangeNotifier {
     return result;
   }
 
-  //create a new user
   void createNewUserInUI(BuildContext context,
       {required String email,
       required String password,
       required String retypePassword}) async {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (registerFormKey.currentState?.validate() ?? false) {
       if (retypePassword.toString().trim() != password.toString().trim()) {
         showSnackBar(context, "passwords do not match!");
-      }
-      else{
-      BackendlessUser user = BackendlessUser()
-        ..email = email.trim()
-        ..password = password.trim();
-
-      String result =
-          await context.read<UserManagementViewModel>().createUserAccount(user);
-      if (result != 'OK') {
-        showSnackBar(context, result);
       } else {
-        showSnackBar(context, 'Account created successfully!');
-        Navigator.pop(context);
-      }}
+        BackendlessUser user = BackendlessUser()
+          ..email = email.trim()
+          ..password = password.trim();
+
+        String result = await context
+            .read<UserManagementViewModel>()
+            .createUserAccount(user);
+        if (result != 'OK') {
+          showSnackBar(context, result);
+        } else {
+          showSnackBar(context, 'Account created successfully!');
+          Navigator.pop(context);
+        }
+      }
     }
   }
 
@@ -196,6 +189,21 @@ class UserManagementViewModel with ChangeNotifier {
     return result;
   }
 
+  void logoutUserInUI(BuildContext context) async {
+    String result = await context.read<UserManagementViewModel>().logoutUser();
+    if (result == 'OK') {
+      _showUserProgress = true;
+      _userProgressText = 'Logging out';
+      context.read<UserManagementViewModel>().setCurrentUserToNull();
+      Navigator.popAndPushNamed(context, RouteManager.loginPage);
+      _showUserProgress = false;
+      notifyListeners();
+      showSnackBar(context, "Logged out!");
+    } else {
+      showSnackBar(context, result);
+    }
+  }
+
   //reset user password
   Future<String> resetPassword(String username) async {
     String result = 'OK';
@@ -210,6 +218,22 @@ class UserManagementViewModel with ChangeNotifier {
     _showUserProgress = false;
     notifyListeners();
     return result;
+  }
+
+  void resetPasswordInUI(BuildContext context, {required String email}) async {
+    if (email.isEmpty) {
+      showSnackBar(context,
+          'Please enter your email address and click on "Reset Password"');
+    } else {
+      String result = await context
+          .read<UserManagementViewModel>()
+          .resetPassword(email.trim());
+      if (result == 'OK') {
+        showSnackBar(context, "Reset instructions sent to ${'email'}");
+      } else {
+        showSnackBar(context, result);
+      }
+    }
   }
 }
 

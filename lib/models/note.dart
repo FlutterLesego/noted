@@ -19,25 +19,25 @@ List<Note> convertMapToNoteList(Map<dynamic, dynamic> map) {
 class Note {
   final String title;
   final String message;
-  // final String email;
+  String? email;
 
   Note({
     required this.title,
     required this.message,
-    // required this.email,
+    this.email,
   });
 
   Map<String, Object?> toJson() => {
+        'email': email,
         'title': title,
         'message': message,
-        // 'email': email,
       };
 
   static Note fromJson(Map<dynamic, dynamic>? json) => Note(
-    // email: json!['email'] as String,
-    title: json!['title'] as String,
-    message: json['message'] as String,
-  );
+        email: json!['email'] as String,
+        title: json['title'] as String,
+        message: json['message'] as String,
+      );
 
   @override
   bool operator ==(covariant Note note) {

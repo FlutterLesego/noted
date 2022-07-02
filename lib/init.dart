@@ -23,6 +23,8 @@ class InitApp {
     String result =
         await context.read<UserManagementViewModel>().checkIfUserLoggedIn();
     if (result == 'OK') {
+      
+      context.read<NoteViewModel>().getNotesInUI(context);
       //get the notes list for the specific user logged in
       context
           .read<NoteViewModel>()

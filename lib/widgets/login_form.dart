@@ -5,7 +5,6 @@ import 'package:tuple/tuple.dart';
 import '../miscellaneous/constants.dart';
 import '../miscellaneous/validators.dart';
 import '../routes/route_manager.dart';
-import '../services/user_helper.dart';
 import '../view_models/user_management_view_model.dart';
 import 'app_progress_indicator.dart';
 
@@ -94,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                 TextButton(
                   onPressed: () {
                     FocusManager.instance.primaryFocus?.unfocus();
-                    resetPasswordInUI(context,
+                    context.read<UserManagementViewModel>().resetPasswordInUI(context,
                         email: emailController.text.trim());
                   },
                   child: const Text(

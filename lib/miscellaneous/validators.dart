@@ -21,8 +21,8 @@ String? validatePassword(String? value) {
 }
 
 String? validateRetypePassword(String? value) {
-  if (value == null) {
-    return 'passwords do nto match!';
+  if (value == null || value.isEmpty) {
+    return 'passwords do not match!';
   } else {
     return null;
   }

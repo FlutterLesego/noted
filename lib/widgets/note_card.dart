@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/material.dart';
 
 import '../models/note.dart';
@@ -16,15 +18,16 @@ class NoteCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: ListTile(
           title: Text(note.title,
-          style: const TextStyle(
-            color: Colors.black, 
-            fontWeight: FontWeight.w300,
-            fontSize: 20)),
-          onTap: (){
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 20)),
+          onTap: () {
             Navigator.of(context).pushNamed(RouteManager.noteViewPage);
           },
         ),
       ),
     );
+    const Divider();
   }
 }

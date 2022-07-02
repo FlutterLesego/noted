@@ -19,6 +19,7 @@ class NoteView extends StatelessWidget {
           note.title,
           style: titleStyle,
         ),
+        const SizedBoxH10(),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
