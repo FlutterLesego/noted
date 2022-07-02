@@ -136,7 +136,6 @@ class NoteViewModel with ChangeNotifier {
           titleController.text = '';
           messageController.text = '';
           context.read<NoteViewModel>().createNote(note);
-          showSnackBar(context, "Note saved successfully!");
           Navigator.pop(context);
         }
       }
