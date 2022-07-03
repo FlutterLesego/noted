@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison, avoid_unnecessary_containers
+import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
 import '../miscellaneous/constants.dart';
@@ -39,17 +40,19 @@ class _NoteListPageState extends State<NoteListPage>
       body: SafeArea(
         child: provider.Consumer<NoteViewModel>(
           builder: (context, value, child) {
-            return value == null
-                ? const Text(
-                    'No notes to display',
-                    style: style14Black,
-                  )
-                : ListView.builder(
+            return value != null
+                ? ListView.builder(
                     padding: const EdgeInsets.all(5.0),
                     itemCount: value.notes.length,
                     itemBuilder: (context, index) {
                       return NoteCard(note: value.notes[index]);
-                    });
+                    })
+                : const Center(
+                    child: Text(
+                      'No notes to display',
+                      style: style14Black,
+                    ),
+                  );
           },
         ),
       ),

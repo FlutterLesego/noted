@@ -30,10 +30,10 @@ class NoteViewModel with ChangeNotifier {
   bool get savingNote => _savingNote;
 
   //retieve notes for a specific user
-  Future<String> getNotes(String email) async {
+  Future<String> getNotes(String username) async {
     String result = 'OK';
     DataQueryBuilder dataQueryBuilder = DataQueryBuilder()
-      ..whereClause = "email = '$email'";
+      ..whereClause = "username = '$username'";
 
     //show retrieval progress
     _retrievingNote = true;
@@ -77,7 +77,7 @@ class NoteViewModel with ChangeNotifier {
   Future<String> saveNote(String email, bool inUI) async {
     String result = 'OK';
     if (_noteEntry == null) {
-      _noteEntry = NoteEntry(notes: convertNoteListToMap(_notes), email: email);
+      _noteEntry = NoteEntry(notes: convertNoteListToMap(_notes), username: email);
     } else {
       _noteEntry!.notes = convertNoteListToMap(_notes);
     }
@@ -109,11 +109,7 @@ class NoteViewModel with ChangeNotifier {
       {required TextEditingController titleController,
       required TextEditingController messageController}) async {
     if (noteFormKey.currentState?.validate() ?? false) {
-      String result = await context.read<NoteViewModel>().saveNote(
-          context.read<UserManagementViewModel>().currentUser!.email, true);
-      if (result != 'OK') {
-        showSnackBar(context, result);
-      } else {
+      context.read<NoteViewModel>().saveNote(context.read<UserManagementViewModel>().currentUser!.email, true);
         Note note = Note(
           email: context
               .read<UserManagementViewModel>()
@@ -136,19 +132,9 @@ class NoteViewModel with ChangeNotifier {
           titleController.text = '';
           messageController.text = '';
           context.read<NoteViewModel>().createNote(note);
+          context.read<NoteViewModel>().saveNote(context.read<UserManagementViewModel>().currentUser!.email, true);
           Navigator.pop(context);
         }
-      }
-    }
-  }
-
-  void saveNoteInUI(BuildContext context) async {
-    String result = await context.read<NoteViewModel>().saveNote(
-        context.read<UserManagementViewModel>().currentUser!.email, true);
-    if (result != 'OK') {
-      showSnackBar(context, result);
-    } else {
-      showSnackBar(context, "Note saved successfully!");
     }
   }
 

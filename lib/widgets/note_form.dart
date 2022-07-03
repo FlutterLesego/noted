@@ -73,7 +73,6 @@ class _NoteFormState extends State<NoteForm> {
                 context.read<NoteViewModel>().createNoteInUI(context,
                     titleController: titleController,
                     messageController: messageController);
-                context.read<NoteViewModel>().saveNoteInUI(context);
               },
               child: const Text('Save Note'),
             ),

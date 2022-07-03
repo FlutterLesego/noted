@@ -4,6 +4,7 @@ import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import '../models/note_entry.dart';
 import '../routes/route_manager.dart';
 import '../widgets/dialogs.dart';
 import 'note_view_model.dart';
@@ -43,8 +44,15 @@ class UserManagementViewModel with ChangeNotifier {
     _userProgressText = 'Creating account...';
     notifyListeners();
 
-    try {
+   try {
       await Backendless.userService.register(user);
+      NoteEntry emptyEntry = NoteEntry(notes: {}, username: user.email);
+      await Backendless.data
+          .of('NoteEntry')
+          .save(emptyEntry.toJson())
+          .onError((error, stackTrace) {
+        result = error.toString();
+      });
     } catch (e) {
       result = getError(e.toString());
     }
@@ -58,6 +66,7 @@ class UserManagementViewModel with ChangeNotifier {
       required String password,
       required String retypePassword}) async {
     FocusManager.instance.primaryFocus?.unfocus();
+    
     if (registerFormKey.currentState?.validate() ?? false) {
       if (retypePassword.toString().trim() != password.toString().trim()) {
         showSnackBar(context, "passwords do not match!");
@@ -243,7 +252,7 @@ String getError(String message) {
     return 'Please confirm your email address first';
   }
   if (message.contains('User already exists')) {
-    return 'User already exists! Please create a new user.';
+    return 'User already exists! Please create a new user or log in.';
   }
   if (message.contains('Invalid login or password')) {
     return 'Invalid credentials! Please check your username or password.';
@@ -253,7 +262,7 @@ String getError(String message) {
     return 'Account locked due to many failed login attempts. Please try again after 30 minutes.';
   }
   if (message.contains('Unable to find a user with the specified identity')) {
-    return 'Email address not found! Please check and try again.';
+    return 'Email address not found! Please check and try again or register a new account.';
   }
   if (message.contains(
       'Unable to resolve host "api.backendless.com": No address associated with hostname')) {
