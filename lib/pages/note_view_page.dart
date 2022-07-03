@@ -25,9 +25,10 @@ class NoteViewPage extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: provider.Consumer<NoteViewModel>(
             builder: (context, value, child) {
-              return PageView.builder(
+              return ListView.builder(
+                itemCount: 1,
                   itemBuilder: (context, index) {
-                    return NoteView(note: value.notes.singleWhere((element) => true));
+                    return NoteView(note: value.notes[index]);
                   });
             },
           ),
