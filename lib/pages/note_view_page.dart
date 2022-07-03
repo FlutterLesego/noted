@@ -1,6 +1,4 @@
 
-import 'package:assignment2_2022/models/note.dart';
-import 'package:assignment2_2022/view_models/user_management_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
 
@@ -10,9 +8,8 @@ import '../widgets/note_view.dart';
 
 class NoteViewPage extends StatelessWidget {
   const NoteViewPage({
-    Key? key, required this.note,
+    Key? key,
   }) : super(key: key);
-    final Note note;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +26,8 @@ class NoteViewPage extends StatelessWidget {
           child: provider.Consumer<NoteViewModel>(
             builder: (context, value, child) {
               return PageView.builder(
-                  itemCount: 1,
                   itemBuilder: (context, index) {
-                    return NoteView(note: Note(title: note.title, message: note.message),);
+                    return NoteView(note: value.notes.singleWhere((element) => true));
                   });
             },
           ),

@@ -24,7 +24,7 @@ class NoteEntry {
       };
 
   static NoteEntry fromJson(Map<dynamic, dynamic>? json) => NoteEntry(
-        username: json!['email'] as String,
+        username: json!['uername'] as String,
         notes: json['notes'] as Map<dynamic, dynamic>,
         objectId: json['objectId'] as String,
         created: json['created'] as DateTime,

@@ -134,6 +134,7 @@ class NoteViewModel with ChangeNotifier {
           context.read<NoteViewModel>().createNote(note);
           context.read<NoteViewModel>().saveNote(context.read<UserManagementViewModel>().currentUser!.email, true);
           Navigator.pop(context);
+          showSnackBar(context, 'Note saved successfully!');
         }
     }
   }

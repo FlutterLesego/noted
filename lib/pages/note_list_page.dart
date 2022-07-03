@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_null_comparison, avoid_unnecessary_containers
-import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider;
 import '../miscellaneous/constants.dart';

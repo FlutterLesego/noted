@@ -1,4 +1,3 @@
-import 'package:assignment2_2022/models/note.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/loading_page.dart';
@@ -40,7 +39,7 @@ class RouteManager {
 
       case noteViewPage:
         return MaterialPageRoute(
-          builder: (context) =>  NoteViewPage(note: Note(title: '', message: ''),),
+          builder: (context) =>  const NoteViewPage(),
         );
 
       case noteCreatePage:
