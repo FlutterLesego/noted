@@ -1,4 +1,6 @@
-# assignment2_2022
+# note taking app integrated with Backendless database
+
+#copyright protected
 
 A new Flutter project.
 
